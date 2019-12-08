@@ -21,7 +21,8 @@ public class DemoDealWithHandler extends DealWithHandler<String, String> {
     @Override
     protected BiConsumer<ChannelHandlerContext, ServerResponseClient<String>> dealWithRespData() {
         return (channelHandlerContext, serverResponseClient) -> {
-            if ("zhanglong".equals(serverResponseClient.getData())){
+            System.out.println("server:"+serverResponseClient.getData());
+            if ("lisi".equals(serverResponseClient.getData())){
                 System.out.println("server:" + serverResponseClient.getData());
                 sendMsgToServer("lisi");
             }

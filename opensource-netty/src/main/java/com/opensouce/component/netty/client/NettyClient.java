@@ -49,7 +49,6 @@ public class NettyClient<ReqData, RespData> {
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
-
                             //提供了出入站执行器链的容器
                             socketChannel.pipeline()
                                     .addLast(new CustomEncoder(ClientRequestServer.class))
