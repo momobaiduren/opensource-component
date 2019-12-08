@@ -4,6 +4,7 @@ import com.opensouce.component.netty.message.ClientRequestServer;
 import com.opensouce.component.netty.protocol.CustomDecoder;
 import com.opensouce.component.netty.protocol.CustomEncoder;
 import com.opensouce.component.netty.message.ServerResponseClient;
+import com.opensouce.component.netty.task.WorkTaskQueue;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -11,14 +12,13 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.net.InetSocketAddress;
-import java.util.Scanner;
 import java.util.function.BiConsumer;
 
 /**
  * @author ZhangLong on 2019/12/7  1:00 下午
  * @version V1.0
  */
-public class NettyClient {
+public class NettyClient<ReqData, RespData> {
     /**
      * description 引导类
      */
@@ -27,15 +27,17 @@ public class NettyClient {
      * description 非阻塞事件处理的线程管理组件
      */
     private final NioEventLoopGroup workerGroup;
-    private BiConsumer<ChannelHandlerContext, ServerResponseClient> biConsumer;
+    private BiConsumer<ChannelHandlerContext, ServerResponseClient<RespData>> biConsumer;
 
-
-    public NettyClient(BiConsumer<ChannelHandlerContext, ServerResponseClient> biConsumer) {
+    private ChannelClientCache<ReqData> channelClientCache;
+    public NettyClient(BiConsumer<ChannelHandlerContext, ServerResponseClient<RespData>> biConsumer,
+                       ChannelClientCache<ReqData> channelClientCache) {
         bootstrap = new Bootstrap();
         workerGroup = new NioEventLoopGroup();
         bootstrap.group(workerGroup)
                 //设置channel的类型为非阻塞
                 .channel(NioSocketChannel.class);
+        this.channelClientCache = channelClientCache;
         this.biConsumer = biConsumer;
     }
 
@@ -65,9 +67,6 @@ public class NettyClient {
             channelFuture.addListener((ChannelFutureListener) future -> {
                 if (future.isSuccess()) {
                     //TODO 心跳监听连接情况
-                    ClientRequestServer<String> request = new ClientRequestServer<>();
-                    request.setData("zhanglong");
-                    future.channel().writeAndFlush(request);
                     System.out.println("connection server successful");
                 } else {
                     System.out.println("connection server fail");
@@ -75,14 +74,17 @@ public class NettyClient {
                     workerGroup.shutdownGracefully();
                     System.exit(0);
                 }
-            });
+            }).sync();
+            WorkTaskQueue<ReqData> workTaskQueue = channelClientCache.registerChannel(socketAddress, channelFuture.channel());
             while(channelFuture.isDone()){
-                //TODO 事件机制触发消息处理
-                Scanner scanner = new Scanner(System.in);
-                ClientRequestServer<String> request = new ClientRequestServer<>();
-                request.setData(scanner.next());
-                channelFuture.channel().writeAndFlush(request);
+                ReqData reqData = workTaskQueue.poll();
+                if(null != reqData){
+                    ClientRequestServer<ReqData> clientRequestServer = new ClientRequestServer<>();
+                    clientRequestServer.setData(reqData);
+                    channelFuture.channel().writeAndFlush(clientRequestServer);
+                }
             }
+            channelFuture.channel().closeFuture().sync();
             // Wait until the connection is closed. sync()方法是用于阻塞直到结果返回才会继续向下执行
         } catch (InterruptedException e) {
             System.err.println(e.getMessage());
@@ -94,16 +96,5 @@ public class NettyClient {
             }
             ;
         }
-    }
-
-    public static void main(String[] args) throws InterruptedException {
-
-        new NettyClient((channelHandlerContext, response) -> {
-            System.out.println("server::" + response.getData());
-            ClientRequestServer<String> request = new ClientRequestServer<>();
-            request.setData("success");
-            request.sendMsg(channelHandlerContext);
-        }).connect(new InetSocketAddress("localhost", 8112));
-
     }
 }

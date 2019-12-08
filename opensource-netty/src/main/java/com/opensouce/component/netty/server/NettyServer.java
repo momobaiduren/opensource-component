@@ -17,7 +17,7 @@ import java.util.function.BiConsumer;
  * @author ZhangLong on 2019/12/7  12:41 下午
  * @version V1.0
  */
-public class NettyServer {
+public class NettyServer<ReqData> {
 
     private ServerBootstrap serverBootstrap;
     /**
@@ -29,9 +29,9 @@ public class NettyServer {
      */
     private EventLoopGroup work;
 
-    private BiConsumer<ChannelHandlerContext, ClientRequestServer> biConsumer;
+    private BiConsumer<ChannelHandlerContext, ClientRequestServer<ReqData>> biConsumer;
 
-    public NettyServer(BiConsumer<ChannelHandlerContext, ClientRequestServer> biConsumer) {
+    public NettyServer(BiConsumer<ChannelHandlerContext, ClientRequestServer<ReqData>> biConsumer) {
         serverBootstrap = new ServerBootstrap();
         boss = new NioEventLoopGroup();
         work = new NioEventLoopGroup();
@@ -68,7 +68,7 @@ public class NettyServer {
                     ch.pipeline()
                             .addLast(new CustomEncoder(ServerResponseClient.class))
                             .addLast(new CustomDecoder(ClientRequestServer.class))
-                            .addLast(new SimpleServerChannelHandler(biConsumer));
+                            .addLast(new SimpleServerChannelHandler<>(biConsumer));
                 }
             });
             System.out.println(String.format("admin 服务注册端口[%s]启动监听", port));
@@ -89,7 +89,7 @@ public class NettyServer {
     }
 
     public static void main(String[] args) {
-        new NettyServer((channelHandlerContext, request) -> {
+        new NettyServer<String>((channelHandlerContext, request) -> {
             System.out.println("client---->" + request.getData());
             if ("zhanglong".equals(request.getData())){
                 ServerResponseClient<String> serverResponseClient = new ServerResponseClient<>();
