@@ -10,6 +10,8 @@
     <version>1.0</version>
     <modules>
         <module>opensource-netty</module>
+      <module>opensource-zookeeper</module>
+        <module>opensource-rabbitmq</module>
     </modules>
 
 
