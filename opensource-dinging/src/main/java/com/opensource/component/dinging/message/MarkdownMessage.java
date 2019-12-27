@@ -32,9 +32,6 @@ public class MarkdownMessage extends BaseDingMessage {
      */
     private boolean isAtAll;
 
-    public MarkdownMessage() {
-    }
-
     public MarkdownMessage( String title, String text ) {
         this.text = text;
         this.title = title;

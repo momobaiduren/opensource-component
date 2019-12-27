@@ -32,10 +32,6 @@ public class LinkMessage extends BaseDingMessage {
      */
     private String messageUrl;
 
-    public LinkMessage() {
-        this.msgtype = MessageType.link;
-    }
-
     public LinkMessage( String title, String text, String messageUrl ) {
         this.text = text;
         this.title = title;

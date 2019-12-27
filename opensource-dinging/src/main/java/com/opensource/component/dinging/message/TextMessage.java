@@ -27,9 +27,6 @@ public class TextMessage extends BaseDingMessage {
      */
     private boolean isAtAll;
 
-    public TextMessage() {
-    }
-
     public TextMessage( String content ) {
         this.content = content;
         this.msgtype = MessageType.text;
