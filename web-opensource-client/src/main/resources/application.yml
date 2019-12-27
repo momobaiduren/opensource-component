@@ -1,0 +1,15 @@
+server:
+  port: 8899
+spring:
+  application:
+    name: springboot-rabbit
+    #配置rabbitMq 服务器
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: zhanglong
+    password: zl123456
+    #确认消息已发送到交换机(Exchange)确认消息已发送到队列(Queue)
+    publisher-confirm-type: correlated
+    #订阅消息确定
+    publisher-returns: true
