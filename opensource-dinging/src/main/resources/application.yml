@@ -3,4 +3,4 @@ opensource:
     dinging:
       enable: true
       dingurl: https://oapi.dingtalk.com/robot/send
-      accessTokens: 0e570f54c4fb033a6d29a04947723593b6cf40abf01a2af6f45a44aae88ac5a6
+      accessToken: 0e570f54c4fb033a6d29a04947723593b6cf40abf01a2af6f45a44aae88ac5a6

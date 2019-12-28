@@ -70,13 +70,9 @@ public class DindingProvider {
     private <T extends BaseDingMessage> void sendContent( T dingMessage ) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(dingMessage.toMessageMap(), headers);
-        final String[] accessTokens = dingingProperties.getAccessTokens().split(",");
-        for (String accessToken : accessTokens) {
-            restTemplate
-                .postForEntity(dingingProperties.getDingingUrl() + "?access_token=" + accessToken,
-                    entity, Void.class);
-        }
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(dingMessage.toMessageMap(),
+            headers);
+        restTemplate.postForEntity(dingingProperties.getDingingUrl(), entity, Void.class);
     }
 
 
