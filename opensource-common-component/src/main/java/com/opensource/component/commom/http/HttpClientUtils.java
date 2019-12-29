@@ -20,9 +20,14 @@ import org.apache.http.util.EntityUtils;
 
 /**
  * created by zhanglong and since  2019/12/27  5:24 下午
+ *
  * @description: 使用pool处理httpclient
  */
 public class HttpClientUtils {
+
+    public static String doGet( String url ) {
+        return doGet(url, null);
+    }
 
     public static String doGet( String url, Map<String, String> params, Header... headers ) {
         if (StringUtils.isBlank(url)) {
@@ -50,7 +55,9 @@ public class HttpClientUtils {
         return null;
     }
 
-
+    public static String doPost( String url ) {
+        return doPost(url, null);
+    }
 
     public static String doPost( String url, Map<String, String> params, Header... headers ) {
         if (StringUtils.isBlank(url)) {
