@@ -15,17 +15,9 @@
         <module name="web-opensource-client" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="opensource-dingding" target="1.8" />
-      <module name="opensource-transaction" target="1.8" />
-      <module name="opensource-transaction-client" target="1.5" />
-      <module name="opensource-transaction-core" target="1.5" />
-      <module name="opensource-transaction-server" target="8" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="opensource-dingding" options="-parameters" />
       <module name="opensource-dinging" options="-parameters" />
       <module name="opensource-rabbitmq" options="-parameters" />
       <module name="web-opensource-client" options="-parameters" />
