@@ -21,7 +21,8 @@ public class DirectReceiver implements ChannelAwareMessageListener {
         try {
             //因为传递消息的时候用的map传递,所以将Map从Message内取出需要做些处理
             String msg = message.toString();
-            String[] msgArray = msg.split("'");//可以点进Message里面看源码,单引号直接的数据就是我们的map消息数据
+            //可以点进Message里面看源码,单引号直接的数据就是我们的map消息数据
+            String[] msgArray = msg.split("'");
             Map<String, String> msgMap = mapStringToMap(msgArray[1].trim());
             String messageId=msgMap.get("messageId");
             String messageData=msgMap.get("messageData");
