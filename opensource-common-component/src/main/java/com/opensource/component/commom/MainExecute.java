@@ -1,4 +1,8 @@
-package com.opensource.component.commom.event;
+package com.opensource.component.commom;
+
+import com.opensource.component.commom.event.ApplicationEventContext;
+import com.opensource.component.commom.event.BaseEventListener;
+import com.opensource.component.commom.event.EventSource;
 
 /**
  * @author zhanglong and since  2019/12/30  4:04 下午
@@ -12,12 +16,12 @@ public class MainExecute {
      */
     public static void main( String[] args ) {
         final ApplicationEventContext applicationEventContext = new ApplicationEventContext();
-        applicationEventContext.addApplicationListener(new BaseEventListener() {
+        applicationEventContext.registerEventListener(new BaseEventListener() {
             /**
              * description 监听回调的逻辑
              */
             @Override
-            void onEventListener( EventSource eventSource ) {
+            public void onEventListener( EventSource eventSource ) {
                 System.out.println("执行事件,我是"+eventSource);
             }
         });

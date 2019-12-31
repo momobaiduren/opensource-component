@@ -10,5 +10,15 @@ public abstract class BaseEventListener implements EventListener {
      * description 监听事件源
      * @param eventSource 事件源
      */
-    abstract void onEventListener( EventSource eventSource );
+    public abstract void onEventListener( EventSource eventSource );
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals( Object obj ) {
+        return super.equals(obj);
+    }
 }

@@ -4,21 +4,21 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * created by zhanglong and since  2019/12/30  4:41 下午
- *
- * @description: 描述
+ * @author zhanglong
+ * @since 2019/12/30 4:41 下午
+ * @description: 监听的上下文
  */
 public class ApplicationEventContext {
     /**
      * description
      */
-    Set<BaseEventListener> baseEventListeners = new HashSet<>();
+    private Set<BaseEventListener> baseEventListeners = new HashSet<>();
 
     /**
-     * 添加监听器
+     * 注册监听器
      * @param listener 监听器
      */
-    public void addApplicationListener( BaseEventListener listener) {
+    public void registerEventListener( BaseEventListener listener) {
         this.baseEventListeners.add(listener);
     }
 
@@ -29,6 +29,7 @@ public class ApplicationEventContext {
      */
     public void publishEvent( EventSource eventSource) {
         for (BaseEventListener baseEventListener : baseEventListeners) {
+            // 这里可以做事件绑定监听器的逻辑，
             baseEventListener.onEventListener(eventSource);
         }
     }
