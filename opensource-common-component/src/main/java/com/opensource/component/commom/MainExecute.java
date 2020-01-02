@@ -1,7 +1,7 @@
 package com.opensource.component.commom;
 
+import com.opensource.component.commom.event.AbstractEventListener;
 import com.opensource.component.commom.event.ApplicationEventContext;
-import com.opensource.component.commom.event.BaseEventListener;
 import com.opensource.component.commom.event.EventSource;
 
 /**
@@ -9,23 +9,33 @@ import com.opensource.component.commom.event.EventSource;
  * @description: 基于事件驱动
  */
 public class MainExecute {
+
     /**
-     * description
-     * 第一步注册监听器
-     * 第二部发布事件，执行回调
+     * description 第一步注册监听器 第二部发布事件，执行回调
      */
     public static void main( String[] args ) {
-        final ApplicationEventContext applicationEventContext = new ApplicationEventContext();
-        applicationEventContext.registerEventListener(new BaseEventListener() {
-            /**
-             * description 监听回调的逻辑
-             */
-            @Override
-            public void onEventListener( EventSource eventSource ) {
-                System.out.println("执行事件,我是"+eventSource);
-            }
-        });
-        applicationEventContext.publishEvent(new EventSource("zhanglong"));
+        final ApplicationEventContext<String, EventSource<String>> applicationEventContext = new ApplicationEventContext<>();
+        applicationEventContext
+            .registerEventListener(new AbstractEventListener<String, EventSource<String>>() {
+                /**
+                 * description 监听回调的逻辑
+                 */
+                @Override
+                public void onEventListener( EventSource<String> eventSource ) {
+                    System.out.println("执行事件1,我是" + eventSource);
+                }
+            });
+        applicationEventContext
+            .registerEventListener(new AbstractEventListener<String, EventSource<String>>() {
+                /**
+                 * description 监听回调的逻辑
+                 */
+                @Override
+                public void onEventListener( EventSource<String> eventSource ) {
+                    System.out.println("执行事件2,我是" + eventSource);
+                }
+            });
+        applicationEventContext.publishEvent(new EventSource<>("zhanglong"));
     }
 
 }
